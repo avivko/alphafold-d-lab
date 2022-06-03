@@ -17,17 +17,17 @@ class RunAlphaFoldDLabError(Exception):
 
 
 flags.DEFINE_list(
-    'fasta_paths', None, 'Paths to FASTA files, each containing a prediction '
-    'target that will be folded one after another. If a FASTA file contains '
-    'multiple sequences, then it will be folded as a multimer. Paths should be '
-    'separated by commas. All FASTA paths must have a unique basename as the '
-    'basename is used to name the output directories for each prediction.')
-flags.DEFINE_list(
-    'is_prokaryote_list', None, 'Optional for multimer system, not used by the '
-    'single chain system. This list should contain a boolean for each fasta '
-    'specifying true where the target complex is from a prokaryote, and false '
-    'where it is not, or where the origin is unknown. These values determine '
-    'the pairing method for the MSA.')
+                'fasta_paths', None, 'Paths to FASTA files, each containing a prediction '
+                'target that will be folded one after another. If a FASTA file contains '
+                'multiple sequences, then it will be folded as a multimer. Paths should be '
+                'separated by commas. All FASTA paths must have a unique basename as the '
+                'basename is used to name the output directories for each prediction.')
+flags.DEFINE_integer(
+                'num_multimer_predictions_per_model', 5, 'How many '
+                'predictions (each with a different random seed) will be '
+                'generated per model. E.g. if this is 2 and there are 5 '
+                'models then there will be 10 predictions per input. '
+                'Note: this FLAG only applies if model_preset=multimer')
 flags.DEFINE_string('data_dir', None, 'Path to directory of supporting data.')
 flags.DEFINE_string('output_dir', None, 'Path to a directory that will '
                     'store the results.')
@@ -46,6 +46,7 @@ flags.DEFINE_enum('model_preset', 'monomer',
 flags.DEFINE_string('ssd_data_dir', None, 'Local scratch space for fasta I/O.')
 
 FLAGS = flags.FLAGS
+
 
 def main(argv):
     if len(argv) > 1:
@@ -68,6 +69,7 @@ def main(argv):
         "--max_template_date", FLAGS.max_template_date,
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
+        "--num_multimer_predictions_per_model", FLAGS.num_multimer_predictions_per_model,
         "--log_dir", FLAGS.log_dir,
         "--logtostderr",
     ]
@@ -79,9 +81,6 @@ def main(argv):
         ])
     else:
         run_command.extend(["--pdb70_database_path", os.path.join(FLAGS.data_dir, "pdb70", "pdb70")])
-
-    if FLAGS.is_prokaryote_list:
-        run_command.extend(["--is_prokaryote_list", ','.join(FLAGS.is_prokaryote_list)])
 
     if FLAGS.db_preset == "reduced_dbs":
         run_command.extend([
