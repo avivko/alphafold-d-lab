@@ -109,7 +109,7 @@ if __name__ == '__main__':
     parser.add_argument("--job_name", required=True, help="SLURM job_name")
     parser.add_argument("--partition", default="owners", help="SLURM partition")
     parser.add_argument("--time", default="48:00:00", help="Expected SLURM job time")
-    parser.add_argument("--use_local_ssd", default=True, action="store_true",
+    parser.add_argument("--use_local_ssd", default=False, action="store_true",
                         help="Whether to use local ssd to speed up sequence searches at the cost of"
                         "running a time-consuming copy job of the databases and constraints on which"
                         "CPUs can be used (RME CPUs)")
