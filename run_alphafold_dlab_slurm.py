@@ -12,6 +12,7 @@ def main(fasta_paths,
          max_template_date, 
          db_preset, 
          model_preset,
+         num_multimer_predictions_per_model,
          job_name, 
          partition, 
          time, 
@@ -57,6 +58,7 @@ def main(fasta_paths,
         "--max_template_date", max_template_date,
         "--db_preset", db_preset,
         "--model_preset", model_preset,
+        "--num_multimer_predictions_per_model", num_multimer_predictions_per_model,
         "--log_dir", log_dir,
     ]
 
@@ -98,6 +100,11 @@ if __name__ == '__main__':
                         help="Preset db configuration (see Alphafold docs)")
     parser.add_argument("--model_preset", required=True, choices=['monomer', 'monomer_casp14', 'monomer_ptm', 'multimer'],
                         help="Preset model configuration (see Alphafold docs)")
+    parser.add_argument("--num_multimer_predictions_per_model", required=False, default=5,
+                        help="How many predictions (each with a different random seed) will be "
+                        "generated per model. E.g. if this is 2 and there are 5 "
+                        "models then there will be 10 predictions per input. "
+                        "Note: this FLAG only applies if model_preset=multimer")
 
     parser.add_argument("--job_name", required=True, help="SLURM job_name")
     parser.add_argument("--partition", default="owners", help="SLURM partition")
@@ -146,6 +153,7 @@ if __name__ == '__main__':
          time=args.time, 
          constraint=consts,
          container_path=container_path, 
-         data_dir=data_dir, 
+         data_dir=data_dir,
+         num_multimer_predictions_per_model=args.num_multimer_predictions_per_model,
          ssd_data_dir=ssd_dir,
          log_only=args.log_only)

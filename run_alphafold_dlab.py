@@ -16,18 +16,11 @@ class RunAlphaFoldDLabError(Exception):
     pass
 
 
-flags.DEFINE_list(
-                'fasta_paths', None, 'Paths to FASTA files, each containing a prediction '
-                'target that will be folded one after another. If a FASTA file contains '
-                'multiple sequences, then it will be folded as a multimer. Paths should be '
-                'separated by commas. All FASTA paths must have a unique basename as the '
-                'basename is used to name the output directories for each prediction.')
-flags.DEFINE_integer(
-                'num_multimer_predictions_per_model', 5, 'How many '
-                'predictions (each with a different random seed) will be '
-                'generated per model. E.g. if this is 2 and there are 5 '
-                'models then there will be 10 predictions per input. '
-                'Note: this FLAG only applies if model_preset=multimer')
+flags.DEFINE_list('fasta_paths', None, 'Paths to FASTA files, each containing a prediction '
+                  'target that will be folded one after another. If a FASTA file contains '
+                  'multiple sequences, then it will be folded as a multimer. Paths should be '
+                  'separated by commas. All FASTA paths must have a unique basename as the '
+                  'basename is used to name the output directories for each prediction.')
 flags.DEFINE_string('data_dir', None, 'Path to directory of supporting data.')
 flags.DEFINE_string('output_dir', None, 'Path to a directory that will '
                     'store the results.')
@@ -43,6 +36,11 @@ flags.DEFINE_enum('model_preset', 'monomer',
                   'Choose preset model configuration - the monomer model, '
                   'the monomer model with extra ensembling, monomer model with '
                   'pTM head, or multimer model')
+flags.DEFINE_integer('num_multimer_predictions_per_model', 5, 'How many '
+                     'predictions (each with a different random seed) will be '
+                     'generated per model. E.g. if this is 2 and there are 5 '
+                     'models then there will be 10 predictions per input. '
+                     'Note: this FLAG only applies if model_preset=multimer')
 flags.DEFINE_string('ssd_data_dir', None, 'Local scratch space for fasta I/O.')
 
 FLAGS = flags.FLAGS
