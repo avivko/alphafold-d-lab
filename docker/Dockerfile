@@ -21,6 +21,9 @@ ARG CUDA
 # Use bash to support string substitution.
 SHELL ["/bin/bash", "-c"]
 
+# Run to remove the NO_PUBKEY error (https://github.com/deepmind/alphafold/issues/463#issuecomment-1124881779)
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
+
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       build-essential \
       cmake \
