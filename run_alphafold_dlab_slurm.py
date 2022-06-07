@@ -54,19 +54,18 @@ def main(fasta_paths,
         "--fasta_paths", fasta_paths,
         "--output_dir", output_dir,
         "--data_dir", data_dir,
+        "--ssd_data_dir", ssd_data_dir,
         "--max_template_date", max_template_date,
         "--db_preset", db_preset,
         "--model_preset", model_preset,
         "--num_multimer_predictions_per_model", num_multimer_predictions_per_model,
         "--log_dir", log_dir,
     ]
-    if ssd_data_dir:
-        alphafold_dlab_args = alphafold_dlab_args + ["--ssd_data_dir", ssd_data_dir]
 
     script_command = singularity_command + alphafold_dlab_args
     # shlex join requires python 3.8
     # script_command_quoted = shlex.join(script_command)
-    script_command_quoted = ' '.join(shlex.quote(x) for x in script_command)
+    script_command_quoted = ' '.join(shlex.quote(str(x)) for x in script_command)
     logging.info("Script command:\n%s", script_command_quoted)
 
     slurm_command = ["sbatch"] + slurm_args + [script_path]
