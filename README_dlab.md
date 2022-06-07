@@ -105,12 +105,17 @@ The GROUP_SCRATCH is purged of files not created in the last 90 days.  To recopy
 copy_db_to_scratch.sh, located in this repository:
 
 ```sh
-sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh 
+sbatch /ABS_PATH_TO_CLONED_REPO/copy_db_to_scratch.sh 
 ```
 This job could take a few hours. 
 
 If you want to clone a new/different version of AF to GROUP_SCRATCH, you can run something like:
 
 ```sh
-sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh /oak/stanford/groups/deissero/projects/alphafold_new_version
+sbatch /ABS_PATH_TO_CLONED_REPO/copy_db_to_scratch.sh /oak/stanford/groups/deissero/projects/alphafold_new_version
 ```
+
+## Some notes
+- If you use --use_local_ssd=True, the rcopy job might take about 10 hours, yet will save you about 10 min 
+per structure. This means that using this option only makes sense when you are predicting a very large 
+amount of structures. This also means that might also want to predict a larger amount of structures (>5) per job.
