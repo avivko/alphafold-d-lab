@@ -153,7 +153,7 @@ if __name__ == '__main__':
         ssd_dir = os.path.join(ssd_scratch, "model_data")
         constraints = f"({args.constraint})&CPU_GEN:RME"
     else:
-        ssd_dir = None
+        ssd_dir = ''
         constraints = args.constraint
 
     main(fasta_paths=args.fasta_paths,
