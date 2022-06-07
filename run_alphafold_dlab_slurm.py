@@ -66,7 +66,7 @@ def main(fasta_paths,
     script_command = singularity_command + alphafold_dlab_args
     # shlex join requires python 3.8
     # script_command_quoted = shlex.join(script_command)
-    script_command_quoted = ' '.join(shlex.quote(x) for x in script_command)
+    script_command_quoted = ' '.join(shlex.quote(str(x)) for x in script_command)
     logging.info("Script command:\n%s", script_command_quoted)
 
     slurm_command = ["sbatch"] + slurm_args + [script_path]
