@@ -41,7 +41,8 @@ flags.DEFINE_integer('num_multimer_predictions_per_model', 5, 'How many '
                      'generated per model. E.g. if this is 2 and there are 5 '
                      'models then there will be 10 predictions per input. '
                      'Note: this FLAG only applies if model_preset=multimer')
-flags.DEFINE_string('ssd_data_dir', '', 'Local scratch space for fasta I/O.')
+flags.DEFINE_string('ssd_data_dir', None, 'Local scratch space for fasta I/O. '
+                    'If an empty string is passed, then the copy ssd will not be used')
 
 FLAGS = flags.FLAGS
 

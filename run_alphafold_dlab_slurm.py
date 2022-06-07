@@ -35,8 +35,8 @@ def main(fasta_paths,
         "--time", time,
         "--partition", partition,
         "--constraint", constraint,
-        "--cpus-per-task", "15",
-        "--mem-per-cpu", "7GB",  
+        "--cpus-per-task", "16",
+        "--mem-per-cpu", "15GB",
         "--gpus", "1",
         "--output", slurm_output_path,
     ]
@@ -54,15 +54,13 @@ def main(fasta_paths,
         "--fasta_paths", fasta_paths,
         "--output_dir", output_dir,
         "--data_dir", data_dir,
+        "--ssd_data_dir", ssd_data_dir,
         "--max_template_date", max_template_date,
         "--db_preset", db_preset,
         "--model_preset", model_preset,
         "--num_multimer_predictions_per_model", num_multimer_predictions_per_model,
         "--log_dir", log_dir,
     ]
-
-    if ssd_data_dir:
-        alphafold_dlab_args = alphafold_dlab_args + ["--ssd_data_dir", ssd_data_dir]
 
 
     script_command = singularity_command + alphafold_dlab_args
