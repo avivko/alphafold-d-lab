@@ -10,20 +10,21 @@ You should be familiar the important command-line flags:
 For details on these flags see the
 [AF docs](https://github.com/deepmind/alphafold/blob/main/README.md#running-alphafold)  
 
-From within your clone of the alphafold repo on Sherlock:
+
+From within your clone of the alphafold repo on Sherlock (replace uppercase with real paths):
 
 ```sh
-python3 $GROUP_HOME/projects/alphafold/alphafold/run_alphafold_dlab_slurm.py \
+python3 /ABS_PATH_TO_CLONED_REPO/run_alphafold_dlab_slurm.py \
     --max_template_date 2100-01-01 \
     --model_preset monomer \
     --db_preset full_dbs \
-    --fasta_paths $OAK/users/$USER/alphafold/fasta/protein0.fasta,$OAK/users/$USER/alphafold/fasta/protein1.fasta \
-    --output_dir $OAK/users/$USER/alphafold/output \
-    --job_name twoproteins \
+    --fasta_paths ABS_PATH_TO_FIRST_FASTA/protein0.fasta [, ABS_PATH_TO_SECOND_FASTA/protein1.fasta, ...] \
+    --output_dir ABS_PATH_TO_OUTPUT_DIR \
+    --job_name twoproteins 
 ```
 
 The output will be stored in a directory denoting the D-Lab alphafold software version used, and the
-flags used.  For the command above, this would be:
+flags used. For the command above, this would be:
 
 ```sh
 <output_dir>/alphafold_2022.6.0__max_template_date_2100-01-01__db_preset_full_dbs__model_preset_monomer/twoproteins
@@ -57,17 +58,40 @@ The more pertinent changes to run AF on Sherlock:
 To create a new version, once must use a non-Sherlock machine.   This is because Sherlock does not give root
 access, which is needed to build intermediate Docker images.  To release a new software version: tag the
 repo with the version, run make, and then copy the output to our group space.  Versioning uses the
-[CalVer](https://calver.org/) YYYY.MM.MICRO syntax: year, month, and monthly release number.  
+[CalVer](https://calver.org/) YYYY.MM.MICRO syntax: year, month, and monthly release number. Do not forget that new AF 
+versions might also require modifications to our scripts (beyond merging) and to the model data used by AF.
 
 Example release, on a non-Sherlock machine:
-
 ```sh
 git tag 2022.6.0
 make
 scp /tmp/alphafold/2022.6.0-dirty.sif sherlock:/home/groups/deissero/projects/alphafold/singularity
 ```
+Now you should test that the new version successfully predicts both monomers and multimers by running something like:
+```sh
+python3 /ABS_PATH_TO_CLONED_REPO/run_alphafold_dlab_slurm.py \
+    --alternative_container $GROUP_HOME/projects/alphafold/singularity/2022.6.0-dirty.sif \
+    --alternative_data_dir /ABS_PATH_MODEL_DATA_FOR_NEW_VERSION/model_data \
+    --max_template_date 2100-01-01 \
+    --model_preset monomer \
+    --db_preset full_dbs \
+    --fasta_paths /ABS_PATH_TO_CLONED_REPO/test_fastas/6I9K_monomer.fasta \
+    --output_dir $OAK/users/$USER/alphafold/output \
+    --job_name test_mono
+```
+```sh
+python3 /ABS_PATH_TO_CLONED_REPO/run_alphafold_dlab_slurm.py \
+    --alternative_container $GROUP_HOME/projects/alphafold/singularity/2022.6.0-dirty.sif \
+    --alternative_data_dir /ABS_PATH_MODEL_DATA_FOR_NEW_VERSION/model_data \
+    --max_template_date 2100-01-01 \
+    --model_preset multimer \
+    --db_preset full_dbs \
+    --fasta_paths /ABS_PATH_TO_CLONED_REPO/test_fastas/6I9K_homodimer.fasta \
+    --output_dir $OAK/users/$USER/alphafold/output \
+    --job_name test_multi 
+```
 
-After testing that new version successfully predicts both monomers and multimers, you make the new version the default by updating the symlink on a Sherlock machine:
+After testing that the new version successfully predicts both monomers and multimers, you make it the default version by updating the symlink on a Sherlock machine:
 
 ```sh
 cd $GROUP_HOME/projects/alphafold/singularity/
@@ -85,7 +109,7 @@ sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh
 ```
 This job could take a few hours. 
 
-If you want to clone a new/different version of AF to GROUP_SCRATCH, you can, for example, run:
+If you want to clone a new/different version of AF to GROUP_SCRATCH, you can run something like:
 
 ```sh
 sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh /oak/stanford/groups/deissero/projects/alphafold_new_version
