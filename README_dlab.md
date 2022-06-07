@@ -1,12 +1,12 @@
 # AlphaFold on Sherlock
 
 The [`dlab-sherlock-multimer`](https://github.com/deisseroth-lab/alphafold/tree/dlab-sherlock-multimer)
-contains update and scripts to run AF on Stanford's Sherlock cluster.
+contains update and scripts to run AF v2.2 (merged from deepmind/alphafold main, 1 June 2022) on Stanford's Sherlock cluster.
 
 ## Quick Start
 
 You should be familiar the important command-line flags:
-`max_template_date`, `model_preset`, `db_preset`, `is_prokaryote_list`, and `fasta_paths`.
+`max_template_date`, `model_preset`, `db_preset`, and `fasta_paths`.
 For details on these flags see the
 [AF docs](https://github.com/deepmind/alphafold/blob/main/README.md#running-alphafold)  
 
@@ -26,7 +26,7 @@ The output will be stored in a directory denoting the D-Lab alphafold software v
 flags used.  For the command above, this would be:
 
 ```sh
-<output_dir>/alphafold_2021.8.0__max_template_date_2100-01-01__db_preset_full_dbs__model_preset_monomer/twoproteins
+<output_dir>/alphafold_2022.6.0__max_template_date_2100-01-01__db_preset_full_dbs__model_preset_monomer/twoproteins
 ```
 
 Within that directory there will be:
@@ -62,23 +62,31 @@ repo with the version, run make, and then copy the output to our group space.  V
 Example release, on a non-Sherlock machine:
 
 ```sh
-git tag 2021.8.0
+git tag 2022.6.0
 make
-scp /tmp/alphafold/alphafold_2021.8.0.sif sherlock:/home/groups/deissero/projects/alphafold/singularity
+scp /tmp/alphafold/2022.6.0-dirty.sif sherlock:/home/groups/deissero/projects/alphafold/singularity
 ```
 
-To make the new version the default, update the symlink on a Sherlock machine:
+After testing that new version successfully predicts both monomers and multimers, you make the new version the default by updating the symlink on a Sherlock machine:
 
 ```sh
 cd $GROUP_HOME/projects/alphafold/singularity/
-ln -sf alphafold_2021.8.0.sif alphafold.sif
+mv alphafold_2022.6.0-dirty.sif alphafold_2022.6.0.sif
+ln -sf alphafold_2022.6.0.sif alphafold.sif
 ```
 
 ## Keep database and model data on GROUP_SCRATCH
 
-The GROUP_SCRATCH is purged of files not created in the last 90 days.  To recopy the files:
+The GROUP_SCRATCH is purged of files not created in the last 90 days.  To recopy the files, use the script 
+copy_db_to_scratch.sh, located in this repository:
 
 ```sh
-ml system mpifileutils
-srun -p deissero -n 16 -t 48:00:00 dcp /scratch/groups/deissero/projects/alphafold /oak/stanford/groups/deissero/projects/
+sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh 
+```
+This job could take a few hours. 
+
+If you want to clone a new/different version of AF to GROUP_SCRATCH, you can, for example, run:
+
+```sh
+sbatch /PATH_TO_LOCAL_REPO_CLONE/copy_db_to_scratch.sh /oak/stanford/groups/deissero/projects/alphafold_new_version
 ```

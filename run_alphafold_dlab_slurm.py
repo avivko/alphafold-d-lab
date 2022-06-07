@@ -105,6 +105,12 @@ if __name__ == '__main__':
                         "generated per model. E.g. if this is 2 and there are 5 "
                         "models then there will be 10 predictions per input. "
                         "Note: this FLAG only applies if model_preset=multimer")
+    parser.add_argument("--alternative_data_dir",  default=None, required=False,
+                        help="Path to directory of the supporting model data. "
+                        "If None, defaults to GROUP_SCRATCH/projects/alphafold/model_data")
+    parser.add_argument("--alternative_container",  default=None, required=False,
+                        help="Path to an alternative docker image (.sif) for use with singularity"
+                        "If None, defaults to GROUP_HOME/projects/alphafold/singularity/alphafold.sif")
 
     parser.add_argument("--job_name", required=True, help="SLURM job_name")
     parser.add_argument("--partition", default="owners", help="SLURM partition")
@@ -125,34 +131,40 @@ if __name__ == '__main__':
     group_scratch = os.environ['GROUP_SCRATCH']
     ssd_scratch = os.environ['L_SCRATCH']
 
-    container_path = os.path.join(group_home, "projects", "alphafold", "singularity", "alphafold.sif")
-    container_path = os.path.realpath(container_path)
+    if args.alternative_container:
+        container_path = os.path.realpath(args.alternative_container)
+    else:
+        container_path = os.path.join(group_home, "projects", "alphafold", "singularity", "alphafold.sif")
+        container_path = os.path.realpath(container_path)
 
     version = os.path.splitext(os.path.basename(container_path))[0]
     output_subdir = f"{version}__max_template_date_{args.max_template_date}__db_preset_{args.db_preset}__model_preset_{args.model_preset}"
     full_output_dir = os.path.join(args.output_dir, output_subdir, args.job_name)
 
-    data_dir = os.path.join(group_scratch, "projects", "alphafold", "model_data")
+    if args.alternative_data_dir:
+        data_dir = os.path.realpath(args.alternative_data_dir)
+    else:
+        data_dir = os.path.join(group_scratch, "projects", "alphafold", "model_data")
 
     if args.use_local_ssd:
         # There is no constraint to use nodes with large SSD, so instead use the
         # RME cpu constraint.  RME cpus are on machines with large local SSD.
         ssd_dir = os.path.join(ssd_scratch, "model_data")
-        consts = f"({args.constraint})&CPU_GEN:RME"
+        constraints = f"({args.constraint})&CPU_GEN:RME"
     else:
         ssd_dir = None
-        consts = args.constraint
+        constraints = args.constraint
 
     main(fasta_paths=args.fasta_paths,
-         output_dir=full_output_dir, 
-         max_template_date=args.max_template_date, 
-         db_preset=args.db_preset, 
+         output_dir=full_output_dir,
+         max_template_date=args.max_template_date,
+         db_preset=args.db_preset,
          model_preset=args.model_preset,
-         job_name=args.job_name, 
-         partition=args.partition, 
-         time=args.time, 
-         constraint=consts,
-         container_path=container_path, 
+         job_name=args.job_name,
+         partition=args.partition,
+         time=args.time,
+         constraint=constraints,
+         container_path=container_path,
          data_dir=data_dir,
          num_multimer_predictions_per_model=args.num_multimer_predictions_per_model,
          ssd_data_dir=ssd_dir,
