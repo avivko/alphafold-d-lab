@@ -101,7 +101,7 @@ if __name__ == '__main__':
                         help="Preset db configuration (see Alphafold docs)")
     parser.add_argument("--model_preset", required=True, choices=['monomer', 'monomer_casp14', 'monomer_ptm', 'multimer'],
                         help="Preset model configuration (see Alphafold docs)")
-    parser.add_argument("--num_multimer_predictions_per_model", required=False, default=5,
+    parser.add_argument("--num_multimer_predictions_per_model", required=False, default='5',
                         help="How many predictions (each with a different random seed) will be "
                         "generated per model. E.g. if this is 2 and there are 5 "
                         "models then there will be 10 predictions per input. "
