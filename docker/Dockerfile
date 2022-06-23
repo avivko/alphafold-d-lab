@@ -37,7 +37,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
       unzip \
     && rm -rf /var/lib/apt/lists/*
 
-
+RUN curl https://rclone.org/install.sh | bash
 
 ENV NVIDIA_VISIBLE_DEVICES="all"
 ENV TF_FORCE_UNIFIED_MEMORY="1"
