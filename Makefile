@@ -2,6 +2,7 @@
 # https://docs.docker.com/engine/reference/commandline/tag/
 TAG := $(shell git describe --tags --dirty | tr + -)
 
+# define custom output dir: make out=/some/path
 ifdef $(out)
         OUT_DIR := $(out):/output
 else

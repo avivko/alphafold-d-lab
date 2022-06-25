@@ -73,7 +73,7 @@ def main(argv):
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
         "--num_multimer_predictions_per_model", FLAGS.num_multimer_predictions_per_model,
-        "--num_multimer_predictions_per_model", FLAGS.use_gpu_relax,
+        "--use_gpu_relax", FLAGS.use_gpu_relax,
         "--log_dir", FLAGS.log_dir,
         "--logtostderr",
     ]
