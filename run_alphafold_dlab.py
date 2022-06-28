@@ -41,7 +41,7 @@ flags.DEFINE_string('num_multimer_predictions_per_model', '5', 'How many '
                     'generated per model. E.g. if this is 2 and there are 5 '
                     'models then there will be 10 predictions per input. '
                     'Note: this FLAG only applies if model_preset=multimer')
-flags.DEFINE_boolean('use_gpu_relax', True, 'Whether to relax on GPU. '
+flags.DEFINE_string('use_gpu_relax', 'True', 'Whether to relax on GPU. '
                      'Relax on GPU can be much faster than CPU, so it is '
                      'recommended to enable if possible. GPUs must be available'
                      ' if this setting is enabled.')
