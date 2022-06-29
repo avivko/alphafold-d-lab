@@ -81,7 +81,7 @@ def main(argv):
         run_command.extend([
             "--pdb_seqres_database_path", os.path.join(FLAGS.data_dir, "pdb_seqres", "pdb_seqres.txt"),
             "--uniprot_database_path", os.path.join(FLAGS.data_dir, "uniprot", "uniprot.fasta"),
-            "--num_multimer_predictions_per_model", FLAGS.num_multimer_predictions_per_model,
+            "--num_multimer_predictions_per_model", int(FLAGS.num_multimer_predictions_per_model),
         ])
     else:
         run_command.extend(["--pdb70_database_path", os.path.join(FLAGS.data_dir, "pdb70", "pdb70")])
