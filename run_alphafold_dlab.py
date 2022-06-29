@@ -53,7 +53,7 @@ FLAGS = flags.FLAGS
 
 def main(argv):
     if len(argv) > 1:
-        raise app.UsageError(f'Too many command-line arguments: {argv[:1]}')
+        raise app.UsageError(f'Too many command-line arguments: {argv[1:]}')
     
     logging.info('Command line flags\n' + FLAGS.flags_into_string())
 
