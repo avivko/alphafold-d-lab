@@ -26,6 +26,10 @@ flags.DEFINE_string('output_dir', None, 'Path to a directory that will '
                     'store the results.')
 flags.DEFINE_string('max_template_date', None, 'Maximum template release date '
                     'to consider. Important if folding historical test sets.')
+flags.DEFINE_string('use_gpu_relax', None, 'Whether to relax on GPU. '
+                    'Relax on GPU can be much faster than CPU, so it is '
+                    'recommended to enable if possible. GPUs must be available'
+                    ' if this setting is enabled.')
 flags.DEFINE_enum('db_preset', 'full_dbs',
                   ['full_dbs', 'reduced_dbs'],
                   'Choose preset MSA database configuration - '
@@ -41,10 +45,6 @@ flags.DEFINE_string('num_multimer_predictions_per_model', '5', 'How many '
                     'generated per model. E.g. if this is 2 and there are 5 '
                     'models then there will be 10 predictions per input. '
                     'Note: this FLAG only applies if model_preset=multimer')
-flags.DEFINE_string('use_gpu_relax', 'True', 'Whether to relax on GPU. '
-                     'Relax on GPU can be much faster than CPU, so it is '
-                     'recommended to enable if possible. GPUs must be available'
-                     ' if this setting is enabled.')
 flags.DEFINE_string('ssd_data_dir', '', 'Local scratch space for fasta I/O. '
                     'If an empty string is passed, then the copy ssd will not be used')
 
@@ -72,7 +72,7 @@ def main(argv):
         "--max_template_date", FLAGS.max_template_date,
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
-        "--use_gpu_relax", FLAGS.use_gpu_relax,
+        "--use_gpu_relax", True if FLAGS.use_gpu_relax == 'True' else False,
         "--log_dir", FLAGS.log_dir,
         "--logtostderr",
     ]
