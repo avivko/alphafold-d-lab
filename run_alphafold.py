@@ -124,7 +124,7 @@ flags.DEFINE_boolean('run_relax', True, 'Whether to run the final relaxation '
                      'result in predictions with distracting stereochemical '
                      'violations but might help in case you are having issues '
                      'with the relaxation stage.')
-flags.DEFINE_boolean('use_gpu_relax', None, 'Whether to relax on GPU. '
+flags.DEFINE_boolean('use_gpu_relax', True, 'Whether to relax on GPU. '
                      'Relax on GPU can be much faster than CPU, so it is '
                      'recommended to enable if possible. GPUs must be available'
                      ' if this setting is enabled.')
@@ -422,7 +422,6 @@ if __name__ == '__main__':
       'template_mmcif_dir',
       'max_template_date',
       'obsolete_pdbs_path',
-      'use_gpu_relax',
   ])
 
   app.run(main)

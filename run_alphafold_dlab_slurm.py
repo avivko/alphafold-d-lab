@@ -59,7 +59,6 @@ def main(fasta_paths,
         "--db_preset", db_preset,
         "--model_preset", model_preset,
         "--num_multimer_predictions_per_model", num_multimer_predictions_per_model,
-        "--use_gpu_relax", 'True',
         "--log_dir", log_dir,
     ]
 

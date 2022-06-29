@@ -72,7 +72,6 @@ def main(argv):
         "--max_template_date", FLAGS.max_template_date,
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
-        "--use_gpu_relax", True if FLAGS.use_gpu_relax == 'True' else False,
         "--log_dir", FLAGS.log_dir,
         "--logtostderr",
     ]
