@@ -45,7 +45,7 @@ flags.DEFINE_string('use_gpu_relax', 'True', 'Whether to relax on GPU. '
                      'Relax on GPU can be much faster than CPU, so it is '
                      'recommended to enable if possible. GPUs must be available'
                      ' if this setting is enabled.')
-flags.DEFINE_string('ssd_data_dir', "", 'Local scratch space for fasta I/O. '
+flags.DEFINE_string('ssd_data_dir', '', 'Local scratch space for fasta I/O. '
                     'If an empty string is passed, then the copy ssd will not be used')
 
 FLAGS = flags.FLAGS
@@ -72,7 +72,6 @@ def main(argv):
         "--max_template_date", FLAGS.max_template_date,
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
-        "--num_multimer_predictions_per_model", FLAGS.num_multimer_predictions_per_model,
         "--use_gpu_relax", FLAGS.use_gpu_relax,
         "--log_dir", FLAGS.log_dir,
         "--logtostderr",
@@ -82,6 +81,7 @@ def main(argv):
         run_command.extend([
             "--pdb_seqres_database_path", os.path.join(FLAGS.data_dir, "pdb_seqres", "pdb_seqres.txt"),
             "--uniprot_database_path", os.path.join(FLAGS.data_dir, "uniprot", "uniprot.fasta"),
+            "--num_multimer_predictions_per_model", FLAGS.num_multimer_predictions_per_model,
         ])
     else:
         run_command.extend(["--pdb70_database_path", os.path.join(FLAGS.data_dir, "pdb70", "pdb70")])

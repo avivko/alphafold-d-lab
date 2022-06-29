@@ -277,7 +277,7 @@ def predict_structure(
 
 def main(argv):
   if len(argv) > 1:
-    raise app.UsageError('Too many command-line arguments.')
+    raise app.UsageError(f'Too many command-line arguments: {argv[:1]}')
 
   if FLAGS.log_dir != '':
     os.makedirs(FLAGS.log_dir, exist_ok=True)
