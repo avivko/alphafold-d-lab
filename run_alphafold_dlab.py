@@ -47,6 +47,8 @@ flags.DEFINE_string('num_multimer_predictions_per_model', '5', 'How many '
                     'Note: this FLAG only applies if model_preset=multimer')
 flags.DEFINE_string('ssd_data_dir', '', 'Local scratch space for fasta I/O. '
                     'If an empty string is passed, then the copy ssd will not be used')
+flags.DEFINE_string('n_cpus', '8', 'Number of CPUs to use for the data '
+                                   'pipeline.')
 
 FLAGS = flags.FLAGS
 
@@ -73,6 +75,7 @@ def main(argv):
         "--db_preset", FLAGS.db_preset,
         "--model_preset", FLAGS.model_preset,
         "--log_dir", FLAGS.log_dir,
+        "--n_cpus", FLAGS.n_cpus,
         "--logtostderr",
     ]
 

@@ -30,12 +30,15 @@ def main(fasta_paths,
 
     # mem-per-cpu: Found that asking for 8GB on systems with 8GB per core may 
     #              "round up" and take 2x the requested cores.
+
+    n_cpus_per_task = "16"
+
     slurm_args = [
         "--job-name", job_name,
         "--time", time,
         "--partition", partition,
         "--constraint", constraint,
-        "--cpus-per-task", "16",
+        "--cpus-per-task", n_cpus_per_task,
         "--mem-per-cpu", "15GB",
         "--gpus", "1",
         "--output", slurm_output_path,
@@ -59,6 +62,7 @@ def main(fasta_paths,
         "--db_preset", db_preset,
         "--model_preset", model_preset,
         "--num_multimer_predictions_per_model", num_multimer_predictions_per_model,
+        "--n_cpus", str(int(n_cpus_per_task)-1 if int(n_cpus_per_task) > 1 else 1),
         "--log_dir", log_dir,
     ]
 
